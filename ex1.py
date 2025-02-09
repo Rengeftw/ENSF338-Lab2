@@ -1,5 +1,5 @@
 import timeit
-import matplotlib as plt
+import matplotlib.pyplot as plt
 def func(n):
     if n == 0 or n == 1:
         return n
@@ -23,16 +23,39 @@ def func_impr(n, store={}):
     store[n]= func_impr(n-1, store) + func_impr(n-2, store)
     return store[n]
     
-#qs5: 
+#qs5: The time complexity expression is O(n) beecause each number from 0 to n is computed once
 
 #qs6:
 integer = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35]
+times_recursive = []
+times_memoized = []
 
-plt.figure(figsize=(10,5))
-plt.dotplt()
+# Measure execution time for both implementations
+for n in integer:
+    time_recursive = timeit.timeit(lambda: func(n), number=1)
+    time_memoized = timeit.timeit(lambda: func_impr(n), number=1)
+    
+    times_recursive.append(time_recursive)
+    times_memoized.append(time_memoized)
 
-#0+1+2+3+4+5+6
-#0, 1, 1, 2, 3, 5, 8, 13, 21
+# Plot results for func (ex1.6.1.jpg)
+plt.figure(figsize=(10, 5))
+plt.plot(integer, times_recursive, label="Recursive (O(2^n))", color="red")
+plt.xlabel("n")
+plt.ylabel("Execution Time (s)")
+plt.title("Execution Time of Recursive Fibonacci")
+plt.legend()
+plt.savefig("ex1.6.1.jpg")
+plt.clf()
+
+# Plot results for func_impr (ex1.6.2.jpg)
+plt.figure(figsize=(10, 5))
+plt.plot(integer, times_memoized, label="Memoized (O(n))", color="blue")
+plt.xlabel("n")
+plt.ylabel("Execution Time (s)")
+plt.title("Execution Time of Memoized Fibonacci")
+plt.legend()
+plt.savefig("ex1.6.2.jpg")
 
 if __name__ == "__main__":
     elapsed_time = timeit.timeit(lambda : func(39), number=1)
