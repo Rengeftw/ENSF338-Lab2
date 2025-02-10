@@ -16,31 +16,36 @@ def test_function():
     return data
 
 def third_function():
-    # third function that calculates the square of the numbers from 0 to 999
+    # third function that calculates the square of the numbers from 0 to 99999999
     return [i**2 for i in range(100000000)]
 
-#test_function()
-#third_function()
+# 1. A profiler is a module that generates a statistic of a program in the form of a report to describe how often each part run and how long it takes to execute them.
 
-# formated into reports via the pstats module
-
-# 1. A profiler is a module that generates a statistics of a program in the form of a report to describe how often each part fun or how long it takes to execute them.
-
-# 2. Profiling is providing a summary of a program execution, where as benchmarking is comparing two or more program to measure different aspects of their execution. Profiling for python is different than benchmarking because profilers add overheads to to the profiled program, which makes it diffult to compare programs fairly.
+# 2. Profiling summarizes a program’s execution, while benchmarking compares multiple programs. Profiling in Python differs from benchmarking since profilers add overhead, making fair comparisons difficult. This is especially true for Python vs. C, as profilers slow down Python but not C, making C seem faster.
 
 pr = cProfile.Profile()
+
 pr.enable()
-
 test_function()
-third_function()
-
 pr.disable()
+
 s = io.StringIO()
 sortby = SortKey.CUMULATIVE
 ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
 ps.print_stats()
 print(s.getvalue())
 
+pr.clear()
+
+pr.enable()
+third_function()
+pr.disable()
+
+s = io.StringIO()
+sortby = SortKey.CUMULATIVE
+ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+ps.print_stats()
+print(s.getvalue())
 # 3. 
 # 68 function calls (23 primitive calls) in 16.266 seconds
 
